@@ -9,7 +9,7 @@ class ContentArea extends Component {
             <div>
                 <Switch>
                     <Route exact path="/" component={MainPage}/>
-                    <Route exact path="/form" component={FormPage}/>
+                    <Route path="/form" component={FormPage}/>
                 </Switch>
             </div>
         )

@@ -31,7 +31,14 @@ class MainPage extends Component {
     }
 
     onItemClick = (e) => {
-        console.log(e.target.innerText);
+        if (
+            e
+            && e.currentTarget
+            && e.currentTarget.innerText
+        ) {
+            this.props.onFilterSelect(e.currentTarget.innerText);
+            this.props.history.push(`/form/${e.currentTarget.innerText}`);
+        }
     }
 }
 

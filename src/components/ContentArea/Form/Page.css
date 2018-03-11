@@ -1,0 +1,68 @@
+.form-scope {
+
+}
+
+.form__operator-label {
+    font-size: medium;
+    font-weight: 800;
+    margin-bottom: 32px;
+}
+
+.field-block {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+
+    margin-bottom: 16px;
+}
+
+@media (max-width: 460px) {
+    .field-block {
+        flex-flow: column;
+    }
+}
+
+.phone-label {
+    margin: 0 16px;
+    font-size: 26px;
+    float: left;
+}
+
+.phone-input {
+    margin: 16px;
+    padding: 4px 16px;
+    width: 80%;
+    font-size: 36px;
+}
+
+.sum-input {
+    margin: 16px;
+    padding: 4px 16px;
+    width: 80%;
+    font-size: 36px;
+}
+
+.btn {
+    margin: 16px;
+    padding: 4px 16px;
+    width: 80%;
+    font-size: 36px;
+    box-shadow: -3px 1px 9px 0px #adadad;
+    border-radius: 10px;
+    border-style: none;
+}
+
+.btn:hover {
+    color: darkblue;
+    box-shadow: -3px 1px 9px 5px #adadad;
+}
+
+.btn:active {
+    color: white;
+    background-color: #cbc3e2;
+    box-shadow: 0 -1px 1px 0 #adadad;
+    border-radius: 10px;
+}
+
+
+

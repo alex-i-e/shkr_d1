@@ -1,7 +1,9 @@
-import {RECIEVE_VALIDATE_STATE, REQUEST_WAS_SENT} from '../constants/actionTypes';
+import {CHECK_PHONE_VALID, CHECK_SUM_VALID, RECIEVE_VALIDATE_STATE, REQUEST_WAS_SENT} from '../constants/actionTypes';
 
 const State = {
-    isRequestSent: false,
+    isValidForm: null,
+    isPhoneValid: null,
+    isSumValid: null,
     validateResponse: {
         message: '',
         validate: false,
@@ -10,10 +12,22 @@ const State = {
 
 export default (state = State, action) => {
     switch (action.type) {
+        case CHECK_PHONE_VALID:
+            return {
+                ...state,
+                isPhoneValid: action.payload,
+                isValidForm: state.isSumValid && action.payload,
+            };
+        case CHECK_SUM_VALID:
+            return {
+                ...state,
+                isSumValid: action.payload,
+                isValidForm: state.isPhoneValid && action.payload,
+            };
         case REQUEST_WAS_SENT:
             return {
                 ...state,
-                isRequestSent: action.payload,
+                isValidForm: action.payload,
             };
         case RECIEVE_VALIDATE_STATE:
             return {

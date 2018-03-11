@@ -7,7 +7,7 @@ import {Router, Route} from 'react-router';
 const Root = ({store}) => (
     <Provider store={store}>
         <Router history={history}>
-            <Route path="/" component={App}/>
+            <Route path="/*" component={App}/>
         </Router>
     </Provider>
 );
