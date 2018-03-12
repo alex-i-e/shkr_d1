@@ -133,7 +133,12 @@ class FormPage extends Component {
             const res = await agent.Payment.validate();
 
             if (res) {
-                this.props.onPopupOpen('Success', this.props.onPopupClose);
+                this.props.onPopupOpen(
+                    'Success',
+                    () => {
+                        this.OnBackClick();
+                        this.props.onPopupClose();
+                    });
             } else {
                 this.props.onPopupOpen('Error', this.props.onPopupClose);
             }
