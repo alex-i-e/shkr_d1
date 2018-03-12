@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {POPUP_WAS_CLOSED, POPUP_WAS_OPENED, REQUEST_WAS_SENT} from "../../../constants/actionTypes";
+import {
+    CHECK_PHONE_VALID, CHECK_SUM_VALID, POPUP_WAS_CLOSED, POPUP_WAS_OPENED
+} from "../../../constants/actionTypes";
 import agent from "../../../api/agent";
 import './Page.css';
 
@@ -10,9 +12,6 @@ const mapStateToFormPageProps = (state) => ({
 });
 
 const mapDispatchToFormPageProps = (dispatch) => ({
-    onCheckValidate(payload) {
-        dispatch({type: REQUEST_WAS_SENT, payload});
-    },
     onPopupOpen(popupTitle,
                 popupClose) {
         dispatch({type: POPUP_WAS_OPENED, popupOpen: true, popupTitle, popupClose});
@@ -20,7 +19,12 @@ const mapDispatchToFormPageProps = (dispatch) => ({
     onPopupClose() {
         dispatch({type: POPUP_WAS_CLOSED, popupOpen: false});
     },
-
+    onPhoneChanged(payload) {
+        dispatch({type: CHECK_PHONE_VALID, payload});
+    },
+    onSumChanged(payload) {
+        dispatch({type: CHECK_SUM_VALID, payload});
+    },
 });
 
 class FormPage extends Component {
@@ -73,7 +77,7 @@ class FormPage extends Component {
                     }
                 </div>
 
-                <button disabled={!this.props.isValidForm || !this.form.isSumValid || !this.form.isPhoneValid}
+                <button disabled={!this.props.isValidForm}
                         className="btn"
                         type="submit">
                     OK
@@ -93,11 +97,11 @@ class FormPage extends Component {
         if (phoneRegexp.test(phone)) {
             this.form.isPhoneValid = true;
             this.form.msgPhoneValid = '';
-            this.props.onCheckValidate(true, phone);
+            this.props.onPhoneChanged(true);
         } else {
             this.form.isPhoneValid = false;
             this.form.msgPhoneValid = 'Incorrect phone number, please check (ex.: +7(900)123 1234)';
-            this.props.onCheckValidate(false);
+            this.props.onPhoneChanged(false);
         }
 
     };
@@ -113,29 +117,32 @@ class FormPage extends Component {
         ) {
             this.form.isSumValid = true;
             this.form.msgSumValid = '';
-            this.props.onCheckValidate(true);
+            this.props.onSumChanged(true);
         } else {
             this.form.isSumValid = false;
             this.form.msgSumValid = 'Incorrect sum, please check (ex.: min-1, max-1000)';
-            this.props.onCheckValidate(false);
+            this.props.onSumChanged(false);
 
         }
     };
 
-    onSubmitPost = (e) => {
-        e.preventDefault();
+    onSubmitPost = async (e) => {
+        e && e.preventDefault();
 
-        agent.Payment.validate()
-            .then((res) => {
-                if (res) {
-                    this.props.onPopupOpen('Success', this.props.onPopupClose.bind(this));// TODO : bind {this}
-                } else {
-                    this.props.onPopupOpen('Error', this.props.onPopupClose.bind(this));
-                }
-            });
+        try {
+            const res = await agent.Payment.validate();
+
+            if (res) {
+                this.props.onPopupOpen('Success', this.props.onPopupClose);
+            } else {
+                this.props.onPopupOpen('Error', this.props.onPopupClose);
+            }
+        } catch (err) {
+            this.props.onPopupOpen('Error', this.props.onPopupClose);
+        }
     };
 
-    OnBackClick = (e) => {
+    OnBackClick = () => {
         this.props.history.push(`/`);
     };
 

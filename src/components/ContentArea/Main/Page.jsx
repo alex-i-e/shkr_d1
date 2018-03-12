@@ -18,11 +18,13 @@ const mapDispatchToMainPageProps = (dispatch) => ({
 });
 
 class MainPage extends Component {
-    componentDidMount() {
-        agent.Operator.all()
-            .then(res => {
-                this.props.onOperatorsLoaded(res.operators)
-            });
+    async componentDidMount() {
+        try {
+            const res = await agent.Operator.all();
+            this.props.onOperatorsLoaded(res.operators);
+        } catch (err) {
+            this.props.onOperatorsLoaded([]);
+        }
     }
 
     render() {
